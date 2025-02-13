@@ -2,10 +2,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <random>
 
 using namespace std;
 
 void displayScores(int humanWins, int computerWins) {
+    //Inputs humanWins and computerWins and outputs the Scores within a string
     cout << "Current Scores: \n";
     cout << "Human: " << humanWins << " wins\n";
     cout << "Computer: " << computerWins << " wins\n";
@@ -13,10 +15,9 @@ void displayScores(int humanWins, int computerWins) {
 
 string Computer() {
     //Function to determine computer choice
-    srand(time(0));
-    int random_number = (rand() % 3);
-    string options[] = { "Rock", "Paper", "Scissors" };
-    return options[random_number];
+    random_device engine;
+    uniform_int_distribution<int>randomInt(0, 2);
+    return engine;
     //randomly picks a number from 0 to 2 and then using the index "options" to find the choice associated with each number and return it
 }
 string Winner(string humanMove, string computerMove) {
@@ -31,27 +32,34 @@ string Winner(string humanMove, string computerMove) {
     return "Computer";
 }
 
+string playerChoice() {
+    string humanMove;
+    cout << "Enter your move (Rock, Paper, Scissors, or Quit): \n";
+    cin >> humanMove;
+    return humanMove;
+}
+string playerValidation(string humanMove) {
+    //Validate Player's choice
+    while (humanMove != "Rock" && humanMove != "Paper" && humanMove != "Scissors" && humanMove != "Quit") {
+        cout << "Invalid move! Please enter Rock, Paper, Scissors, or Quit: \n";
+        cin >> humanMove;
+    }
+
+}
 int main()
 {
      //Seed Your console time to actually randomize computer's choice with rand()
     int humanWins = 0, computerWins = 0;
-    string humanMove, computerMove, roundResult;
+    string humanMove, computerMove, roundResult, validatedHumanMove;
     string continuePlaying = "y";
 
     while (continuePlaying == "y") {
-        // Get human's move
-        cout << "Enter your move (Rock, Paper, Scissors, or Quit): \n";
-        cin >> humanMove;
+        //Get Human's move
+        humanMove = playerChoice();
+        validatedHumanMove = playerValidation(humanMove);
         if (humanMove == "Quit") {
             break;
         }
-
-        // Validate the player's move
-        while (humanMove != "Rock" && humanMove != "Paper" && humanMove != "Scissors" && humanMove != "Quit") {
-            cout << "Invalid move! Please enter Rock, Paper, Scissors, or Quit: ";
-            cin >> humanMove;
-        }
-
         // Get the computer's move
         computerMove = Computer();
         cout << "Computer chose: " << computerMove << endl;
